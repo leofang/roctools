@@ -6,28 +6,30 @@ set -x
 # Extract bitcodes from ROCM rpm source
 ###############################################################################
 
-RPM_PATH=`readlink -f opencl_tmp/*.rpm`
-ROCM_PATH="opt/rocm/opencl/lib/x86_64/bitcode"
-
-declare -a bitcodes=(                       \
-"opencl.amdgcn.bc"                          \
-"ocml.amdgcn.bc"                            \
-"ockl.amdgcn.bc"                            \
-"oclc_correctly_rounded_sqrt_off.amdgcn.bc" \
-"oclc_daz_opt_off.amdgcn.bc"                \
-"oclc_finite_only_off.amdgcn.bc"            \
-"oclc_isa_version_803.amdgcn.bc"            \
-"oclc_unsafe_math_off.amdgcn.bc"            \
-"irif.amdgcn.bc"                            \
-)
-
-for bitcode in "${bitcodes[@]}"; do
-    bsdtar -x -f "$RPM_PATH" --strip-components 6 "$ROCM_PATH/$bitcode"
-done
+#RPM_PATH=`readlink -f opencl_tmp/*.rpm`
+#ROCM_PATH="opt/rocm/opencl/lib/x86_64/bitcode"
+#
+#declare -a bitcodes=(                       \
+#"opencl.amdgcn.bc"                          \
+#"ocml.amdgcn.bc"                            \
+#"ockl.amdgcn.bc"                            \
+#"oclc_correctly_rounded_sqrt_off.amdgcn.bc" \
+#"oclc_daz_opt_off.amdgcn.bc"                \
+#"oclc_finite_only_off.amdgcn.bc"            \
+#"oclc_isa_version_803.amdgcn.bc"            \
+#"oclc_unsafe_math_off.amdgcn.bc"            \
+#"irif.amdgcn.bc"                            \
+#)
+#
+#for bitcode in "${bitcodes[@]}"; do
+#    bsdtar -x -f "$RPM_PATH" --strip-components 6 "$ROCM_PATH/$bitcode"
+#done
 
 # move the bitcode to the pkg dir
 RESOURCE_PATH="$PREFIX/share/rocmtools"
-mv bitcode $RESOURCE_PATH
+#mv bitcode $RESOURCE_PATH
+mkdir -p $RESOURCE_PATH
+cp /opt/rocm-3.5.0/lib/*.bc $RESOURCE_PATH
 
 ###############################################################################
 # Now do C++ library build
@@ -42,7 +44,8 @@ printenv
 # for libraries via `-L`
 cmake .. -DCMAKE_BUILD_TYPE=RELEASE \
          -DCMAKE_CONDA_ROOT:PATH="$BUILD_PREFIX" \
-         -DCMAKE_BITCODE_ROOT:PATH="$RESOURCE_PATH"
+         -DCMAKE_BITCODE_ROOT:PATH="$RESOURCE_PATH" \
+         -DLLVM_DIR=/home/leofang/dev/llvm/lib/cmake/llvm/
 
 # build
 make VERBOSE=1

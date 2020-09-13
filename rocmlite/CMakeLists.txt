@@ -18,7 +18,7 @@ llvm_libs # this name is magic, it is the variable in which the
           # component linker info is stored.
 #all
 amdgpuasmparser
-amdgpuasmprinter
+#amdgpuasmprinter
 amdgpucodegen
 amdgpudesc
 amdgpudisassembler

@@ -1,5 +1,6 @@
 {% set opencl_devel_ver="1.2.0-2018053132" %}
-{% set opencl_devel_sha256="95f429a25d7e6081fe1c75bd05feb5e515408b82a1631f09d96abb4232e1af68" %}
+#{% set opencl_devel_sha256="95f429a25d7e6081fe1c75bd05feb5e515408b82a1631f09d96abb4232e1af68" %}
+{% set opencl_devel_sha256="14dbd269423cf470d11cd6e183496a64f5b289c55785c1e419dd55b5ada8d700" %}
 
 package:
     name: roctools
@@ -7,10 +8,13 @@ package:
 
 source:
   - path: ../..
-  - fn: rocm-opencl-devel-{{ opencl_devel_ver }}.x86_64.rpm
-    url: http://repo.radeon.com/rocm/yum/rpm/rocm-opencl-devel-{{ opencl_devel_ver }}.x86_64.rpm
+  # the rpm is actually unused, just a placeholder now
+  - fn: rocm-opencl-dev3.5.0-2.0.20191-db0c16d.x86_64.rpm
+    url: http://repo.radeon.com/rocm/yum/3.5/rocm-opencl-dev3.5.0-2.0.20191-db0c16d.x86_64.rpm
     folder: opencl_tmp
     sha256: {{ opencl_devel_sha256 }}
+  #- fn: rocm-opencl-devel-{{ opencl_devel_ver }}.x86_64.rpm
+    #url: http://repo.radeon.com/rocm/yum/rpm/rocm-opencl-devel-{{ opencl_devel_ver }}.x86_64.rpm
 
 build:
     number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
@@ -24,7 +28,7 @@ requirements:
     - zlib
     - bzip2
     - libarchive
-    - llvmdev_amdgcn
+#    - llvmdev_amdgcn
     # gtest is used in the test binaries
     - gtest
 
